@@ -12,6 +12,8 @@ const PUBLIC_PATHS = [
   "/demo/podcaster",
   "/demo/advertiser",
   "/api/waitlist",
+  "/about",
+  "/contact",
 ];
 
 // Pre-launch gate: keep the marketing site + waitlist public while holding
