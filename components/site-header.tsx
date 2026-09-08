@@ -31,6 +31,12 @@ export function SiteHeader() {
             Early access
           </Link>
           <Link
+            href="/demo/podcaster"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Demo
+          </Link>
+          <Link
             href="/about"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
