@@ -5,6 +5,10 @@ export function formatCents(cents: number) {
   });
 }
 
+export function formatCpm(cpmCents: number) {
+  return `${formatCents(cpmCents)} CPM`;
+}
+
 export function formatDate(iso: string) {
   return new Date(iso).toLocaleString("en-US", {
     dateStyle: "medium",

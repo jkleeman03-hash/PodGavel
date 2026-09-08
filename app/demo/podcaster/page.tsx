@@ -1,24 +1,45 @@
 import Link from "next/link";
 import { StatusBadge } from "@/components/status-badge";
 import { VerifiedBadge } from "@/components/verified-badge";
-import { formatCents, formatDate } from "@/lib/format";
+import { formatCents, formatCpm, formatDate } from "@/lib/format";
 
 const podcast = {
   showName: "The Weekly Debrief",
+  hosts: ["Maria Chen", "Jordan Ellis"],
   category: "Business",
-  avgDownloads: 42000,
-  downloadsVerified: true,
+  avgViewers: 42000,
+  viewersVerified: true,
+  avgCpmCents: 3200,
 };
 
-const voiceLicense = {
-  status: "Active",
-  signedAt: "2026-05-12T00:00:00.000Z",
-};
-
-const episodes = [
-  { title: "Episode 118: The Return of the Office", airDate: "2026-08-12T10:00:00.000Z" },
-  { title: "Episode 119: AI and the Newsroom", airDate: "2026-08-19T10:00:00.000Z" },
-  { title: "Episode 120: Venture in a Downturn", airDate: "2026-08-26T10:00:00.000Z" },
+const closedFills = [
+  {
+    id: "1",
+    episodeTitle: "Episode 115: Q2 Earnings Roundup",
+    airDate: "2026-07-15T10:00:00.000Z",
+    advertiser: "Nimbus Coffee Co.",
+    lengthSeconds: 60,
+    priceCents: 48000,
+    status: "filled",
+  },
+  {
+    id: "2",
+    episodeTitle: "Episode 116: The Four-Day Week",
+    airDate: "2026-07-22T10:00:00.000Z",
+    advertiser: "Fernway Finance",
+    lengthSeconds: 30,
+    priceCents: 26000,
+    status: "filled",
+  },
+  {
+    id: "3",
+    episodeTitle: "Episode 117: Hiring in a Slow Market",
+    airDate: "2026-07-29T10:00:00.000Z",
+    advertiser: "Brightloop CRM",
+    lengthSeconds: 60,
+    priceCents: 51000,
+    status: "filled",
+  },
 ];
 
 const openSlots = [
@@ -78,45 +99,56 @@ export default function DemoPodcasterPage() {
           to set up your own.
         </div>
 
-        <div className="mb-10">
+        <div className="mb-8">
           <h1 className="flex items-center gap-2 text-2xl font-semibold">
             {podcast.showName}
-            {podcast.downloadsVerified && <VerifiedBadge />}
+            {podcast.viewersVerified && <VerifiedBadge />}
           </h1>
           <p className="mt-1 text-sm text-gray-600">
-            {podcast.category} · {podcast.avgDownloads.toLocaleString()} avg.
-            downloads per episode
+            {podcast.category} · Hosted by {podcast.hosts.join(" & ")}
           </p>
         </div>
 
-        <section className="mb-10">
-          <h2 className="mb-3 text-lg font-semibold">
-            Voice cloning licensing agreement
-          </h2>
-          <div className="flex items-center justify-between rounded border px-4 py-3">
-            <p className="text-sm text-gray-700">
-              Your cloned voice is licensed only for ad reads you personally
-              approve, and access can be revoked at any time.
+        <section className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="rounded border px-4 py-3">
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-600">Average viewers</p>
+              {podcast.viewersVerified && <VerifiedBadge />}
+            </div>
+            <p className="mt-1 text-2xl font-semibold">
+              {podcast.avgViewers.toLocaleString()}
             </p>
-            <span className="ml-4 shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-              {voiceLicense.status}
-            </span>
+            <p className="text-xs text-gray-500">per episode</p>
           </div>
-          <p className="mt-2 text-xs text-gray-500">
-            Signed {formatDate(voiceLicense.signedAt)}
-          </p>
+          <div className="rounded border px-4 py-3">
+            <p className="text-sm text-gray-600">Average ad-slot CPM</p>
+            <p className="mt-1 text-2xl font-semibold">
+              {formatCpm(podcast.avgCpmCents)}
+            </p>
+            <p className="text-xs text-gray-500">across filled slots</p>
+          </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="mb-3 text-lg font-semibold">Upcoming episode air dates</h2>
-          <ul className="flex flex-col gap-2">
-            {episodes.map((episode) => (
+          <h2 className="mb-3 text-lg font-semibold">
+            Past closed ad-slot fills
+          </h2>
+          <ul className="flex flex-col gap-3">
+            {closedFills.map((fill) => (
               <li
-                key={episode.title}
-                className="flex items-center justify-between rounded border px-4 py-3 text-sm"
+                key={fill.id}
+                className="flex items-center justify-between rounded border px-4 py-3"
               >
-                <span>{episode.title}</span>
-                <span className="text-gray-600">{formatDate(episode.airDate)}</span>
+                <div>
+                  <p className="font-medium">
+                    {fill.episodeTitle} — {fill.advertiser}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Aired {formatDate(fill.airDate)} · {fill.lengthSeconds}s ·{" "}
+                    {formatCents(fill.priceCents)}
+                  </p>
+                </div>
+                <StatusBadge status={fill.status} />
               </li>
             ))}
           </ul>
